@@ -1,26 +1,27 @@
 'use strict';
 
-const btn = document.querySelector('.btn-country');
-const countriesContainer = document.querySelector('.countries');
+const getCountryData = function (country) {
+  const btn = document.querySelector('.btn-country');
+  const countriesContainer = document.querySelector('.countries');
 
-///////////////////////////////////////
-// https://restcountries.com/v2/
+  ///////////////////////////////////////
+  // https://restcountries.com/v2/
 
-//Asynchronous Javascript and XML
+  //Asynchronous Javascript and XML
 
-//old way
-const request = new XMLHttpRequest();
-request.open('GET', 'https://restcountries.com/v2/name/portugal');
-//Send off the request fetching the data
-request.send();
+  //old way
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v2/name/${country}`);
+  //Send off the request fetching the data
+  request.send();
 
-//Once done it will emit the load event, triggering the callback function
-request.addEventListener('load', function () {
-  const [data] = JSON.parse(this.responseText);
-  console.log(data);
+  //Once done it will emit the load event, triggering the callback function
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
 
-  //Copied from commented section
-  const html = `        <article class="country">
+    //Copied from commented section
+    const html = `        <article class="country">
   <img class="country__img" src="${data.flag}" />
   <div class="country__data">
     <h3 class="country__name">${data.name}</h3>
@@ -33,6 +34,10 @@ request.addEventListener('load', function () {
   </div>
 </article>`;
 
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
-});
+    countriesContainer.insertAdjacentHTML('beforeend', html);
+    countriesContainer.style.opacity = 1;
+  });
+};
+getCountryData('portugal');
+getCountryData('usa');
+getCountryData('germany');
