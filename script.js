@@ -1,6 +1,6 @@
 'use strict';
 
-const countryBtn = document.getElementById('country-btn');
+const btnInput = document.getElementById('input-btn');
 
 let input;
 
@@ -9,18 +9,24 @@ const displayCountry = function (input) {
   getCountryData(input);
 };
 
-//Capturing the string function
+//Capturing the string
 const countryString = function () {
   input = document.getElementById('country-input').value;
-  console.log(input);
   displayCountry(input);
   clearString();
 };
 
+// clears the input to an empty string
 const clearString = function () {
   document.getElementById('country-input').value = '';
 };
-countryBtn.addEventListener('click', countryString);
+// using enter to submit input
+const enterKeyPressed = function (e) {
+  if (e.keyCode == 13) {
+    countryString();
+  }
+};
+btnInput.addEventListener('click', countryString);
 
 const getCountryData = function (country) {
   const btn = document.querySelector('.btn-country');
@@ -60,5 +66,4 @@ const getCountryData = function (country) {
     countriesContainer.style.opacity = 1;
   });
 };
-
-// no string restrictions implemented yet
+getCountryData('usa');
