@@ -9,9 +9,16 @@
     <title>Asynchronous JavaScript</title>
   </head>
   <body>
-    <h1>Choose a country!</h1>
-    <input type="text" id="country-input" />
-    <button id="country-btn">Search</button>
+    <div id="btn-container">
+      <h1>Choose a country!</h1>
+      <input
+        type="text"
+        id="country-input"
+        onkeypress="enterKeyPressed(event)"
+      />
+      <button id="input-btn">Search</button>
+    </div>
+
     <main class="container">
       <div class="countries">
         <!--
