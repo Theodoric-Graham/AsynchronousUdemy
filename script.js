@@ -1,5 +1,9 @@
 'use strict';
 
+//Prompt that asks for the country, which triggers getCountryData function
+let countryString = window.prompt('Please enter a country');
+console.log(countryString);
+
 const getCountryData = function (country) {
   const btn = document.querySelector('.btn-country');
   const countriesContainer = document.querySelector('.countries');
@@ -38,6 +42,6 @@ const getCountryData = function (country) {
     countriesContainer.style.opacity = 1;
   });
 };
-getCountryData('portugal');
-getCountryData('usa');
-getCountryData('germany');
+
+// no string restrictions implemented yet
+if (countryString) getCountryData(countryString);
