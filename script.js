@@ -1,8 +1,26 @@
 'use strict';
 
-//Prompt that asks for the country, which triggers getCountryData function
-let countryString = window.prompt('Please enter a country');
-console.log(countryString);
+const countryBtn = document.getElementById('country-btn');
+
+let input;
+
+//displaying the dynamic html
+const displayCountry = function (input) {
+  getCountryData(input);
+};
+
+//Capturing the string function
+const countryString = function () {
+  input = document.getElementById('country-input').value;
+  console.log(input);
+  displayCountry(input);
+  clearString();
+};
+
+const clearString = function () {
+  document.getElementById('country-input').value = '';
+};
+countryBtn.addEventListener('click', countryString);
 
 const getCountryData = function (country) {
   const btn = document.querySelector('.btn-country');
@@ -44,4 +62,3 @@ const getCountryData = function (country) {
 };
 
 // no string restrictions implemented yet
-if (countryString) getCountryData(countryString);
