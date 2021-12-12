@@ -7,7 +7,7 @@ let input;
 
 //displaying the dynamic html
 const displayCountry = function (input) {
-  getCountryAndNeighbour(input);
+  getCountryData(input);
 };
 
 //Capturing the string
@@ -48,41 +48,9 @@ const renderCountry = function (data, className = '') {
   countriesContainer.style.opacity = 1;
 };
 
-const getCountryAndNeighbour = function (country) {
-  const btn = document.querySelector('.btn-country');
-
-  ///////////////////////////////////////
-  // https://restcountries.com/v2/
-
-  //AJAX call country 1
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v2/name/${country}`);
-  //Send off the request fetching the data
-  request.send();
-
-  //Once done it will emit the load event, triggering the callback function
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    console.log(data);
-    // Render Country 1
-    renderCountry(data);
-
-    // Get neighbour country (2)
-    const [neighbour] = data.borders;
-
-    if (!neighbour) return;
-
-    // AJAX call country 2
-    const request2 = new XMLHttpRequest();
-    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
-    //Send off the request fetching the data
-    request2.send();
-    request2.addEventListener('load', function () {
-      const data2 = JSON.parse(this.responseText);
-      console.log(data2);
-
-      renderCountry(data2, 'neighbour');
-    });
-  });
+// Getting data using fetch and promises
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
 };
-getCountryAndNeighbour('usa');
