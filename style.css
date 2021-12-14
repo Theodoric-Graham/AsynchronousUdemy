@@ -12,7 +12,7 @@ html {
 body {
   font-family: system-ui;
   color: #555;
-  background-color: #f7f7f7;
+  background-color: #4e4e4e;
   min-height: 100vh;
 
   display: flex;
@@ -28,6 +28,8 @@ body {
 
 .countries {
   /* margin-bottom: 8rem; */
+
+  color: white;
   display: flex;
 
   font-size: 2rem;
@@ -36,7 +38,7 @@ body {
 }
 
 .country {
-  background-color: #fff;
+  background-color: rgb(22, 95, 143);
   box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
   font-size: 1.8rem;
   width: 30rem;
@@ -97,6 +99,7 @@ body {
   margin-right: 2rem;
   font-size: 2.4rem;
 }
+
 #btn-container {
   position: absolute;
   top: 50px;
@@ -127,4 +130,8 @@ body {
   margin: 2rem;
   border: 3rem solid white;
   box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: rgb(255, 255, 255);
 }
