@@ -102,14 +102,59 @@ btn.addEventListener('click', function () {
   getCountryData('usa');
 });
 
-//Example of microtask queue taking priority over callback queue
-// console.log('Test Start');
-// setTimeout(() => console.log('0 sec timer'), 0);
-// Promise.resolve('Resolved promise 1').then(res => console.log(res));
+//executor function
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log('Lottery draw is happening 🔮');
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('You Win 🤑');
+    } else {
+      reject(new Error('You lose 😢'));
+    }
+  }, 2000);
+});
 
-// Promise.resolve('Resolved promise 2').then(res => {
-//   for (let i = 0; i < 10000000000; i++) {}
-//   console.log(res);
-// });
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
 
-// console.log('Test end');
+//promisifying setTimeout
+const wait = seconds => {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(1)
+  .then(() => {
+    console.log('1 second passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('2 second passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('3 second passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('4 second passed');
+    return wait(1);
+  });
+
+//callback hell
+// setTimeout(() => {
+//   console.log('1 second passed');
+//   setTimeout(() => {
+//     console.log('2 seconds passed');
+//     setTimeout(() => {
+//       console.log('3 seconds passed');
+//       setTimeout(() => {
+//         console.log('4 seconds passed');
+//       }, 1000);
+//     }, 1000);
+//   }, 1000);
+// }, 1000);
+
+//resolve is a static method on the promise constructor
+Promise.resolve('abc').then(x => console.log(x));
+Promise.reject(new Error('Problem!')).catch(x => console.error(x));
