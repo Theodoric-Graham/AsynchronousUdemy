@@ -102,59 +102,40 @@ btn.addEventListener('click', function () {
   getCountryData('usa');
 });
 
-//executor function
-const lotteryPromise = new Promise(function (resolve, reject) {
-  console.log('Lottery draw is happening 🔮');
-  setTimeout(function () {
-    if (Math.random() >= 0.5) {
-      resolve('You Win 🤑');
-    } else {
-      reject(new Error('You lose 😢'));
-    }
-  }, 2000);
-});
-
-lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
-
-//promisifying setTimeout
-const wait = seconds => {
-  return new Promise(resolve => {
-    setTimeout(resolve, seconds * 1000);
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 };
 
-wait(1)
-  .then(() => {
-    console.log('1 second passed');
-    return wait(1);
-  })
-  .then(() => {
-    console.log('2 second passed');
-    return wait(1);
-  })
-  .then(() => {
-    console.log('3 second passed');
-    return wait(1);
-  })
-  .then(() => {
-    console.log('4 second passed');
-    return wait(1);
-  });
+getPosition().then(pos => console.log(pos));
 
-//callback hell
-// setTimeout(() => {
-//   console.log('1 second passed');
-//   setTimeout(() => {
-//     console.log('2 seconds passed');
-//     setTimeout(() => {
-//       console.log('3 seconds passed');
-//       setTimeout(() => {
-//         console.log('4 seconds passed');
-//       }, 1000);
-//     }, 1000);
-//   }, 1000);
-// }, 1000);
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
 
-//resolve is a static method on the promise constructor
-Promise.resolve('abc').then(x => console.log(x));
-Promise.reject(new Error('Problem!')).catch(x => console.error(x));
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Problem with geocoding ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.country}`);
+    })
+    .catch(err => {
+      console.error(`${err} ❌❌❌`);
+      renderError(`Something went wrong ❌❌❌ ${err.message}. Try again!`);
+    });
+};
+
+btn.addEventListener('click', whereAmI);
