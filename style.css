@@ -11,8 +11,8 @@ html {
 
 body {
   font-family: system-ui;
-  color: #555;
-  background-color: #4e4e4e;
+  color: rgb(202, 155, 155);
+  background-color: #ce9c9c;
   min-height: 100vh;
 
   display: flex;
