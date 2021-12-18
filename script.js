@@ -135,13 +135,31 @@ btnInput.addEventListener('click', countryString);
 //     });
 // };
 
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+
 const whereAmI = async function (country) {
-  const res = await fetch(`https://restcountries.com/v3.1/name/${country}`);
+  //Geolocation
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+
+  //Reverse Geocoding
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  const dataGeo = await resGeo.json()
+  console.log(dataGeo);
+  
+  //Country Data
+  const res = await fetch(`https://restcountries.com/v3.1/name/${dataGeo.country}`);
   const data = await res.json();
   console.log(data);
   renderCountry(data[0]);
 };
 
-whereAmI('usa');
+whereAmI();
 console.log('First');
 // btn.addEventListener('click', whereAmI);
