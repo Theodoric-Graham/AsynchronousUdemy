@@ -55,13 +55,11 @@ const enterKeyPressed = function (e) {
 };
 btnInput.addEventListener('click', countryString);
 
-
 const getJSON = function (url, errorMsg = 'Something went wrong') {
   return fetch(url).then(response => {
     //throwing an error inside the callback function of the then method
     //immediately rejects the promise, traveling down the chain until it is 'caught'
-    if (!response.ok) 
-    throw new Error(`${errorMsg} (${response.status})`);
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
 
     return response.json();
   });
@@ -207,7 +205,7 @@ console.log('1: Will get location');
   console.log('3: Finished getting location ')
 })();
 
-*/
+
 
 const get3Countries = async function (c1, c2, c3) {
   try {
@@ -215,13 +213,14 @@ const get3Countries = async function (c1, c2, c3) {
     // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`)
     // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`)
 
-    //static method on promise constructor, if one promise rejects it rehects the whole promise
+    //static method on promise constructor, 
+    // if one promise rejects it rejects the whole promise, combinator function
     const data = await Promise.all([
     getJSON(`https://restcountries.com/v3.1/name/${c1}`), 
     getJSON(`https://restcountries.com/v3.1/name/${c2}`),
     getJSON(`https://restcountries.com/v3.1/name/${c3}`),
   ]);
-console.log(data.map(d => d[0].capital[0]));
+console.log(data.flatMap(d => d[0].capital));
 } catch(err) {
     console.error(err);
   }
@@ -229,3 +228,63 @@ console.log(data.map(d => d[0].capital[0]));
 
 get3Countries('portugal', 'canada', 'tanzania')
 
+*/
+
+//Practice with Promise combinators
+
+// Promise.race (recieves an array of promises and also returns a promise, the
+// promise is settled as soon as 1 of the input promises is settled "first
+// settled promise wins the race", short circuits whenever one of the promises
+// gets settled, fulfilled or rejected, good for long promises)
+
+(async function () {
+  const res = await Promise.race([
+    getJSON(`https://restcountries.com/v3.1/name/italy`),
+    getJSON(`https://restcountries.com/v3.1/name/egypt`),
+    getJSON(`https://restcountries.com/v3.1/name/mexico`),
+  ]);
+  console.log(res[0]);
+})();
+
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error('Request took too long!'));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/mexico`),
+  timeout(1),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.error(err));
+
+//Promise.allSettled (ES2020 recieves an array of promises and also returns all the
+//settled promises, rejected or not, never short cicuits)
+Promise.allSettled([
+  Promise.resolve('Success'),
+  Promise.reject('ERROR'),
+  Promise.resolve('Another Success'),
+]).then(res => console.log(res));
+
+//Promise.all comparison(short circuits if there is 1 error)
+Promise.all([
+  Promise.resolve('Success'),
+  Promise.reject('ERROR'),
+  Promise.resolve('Another Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+
+//Promise.any (ES2021 recieves an array of promises, return the first fulfilled
+//promise, and ignore rejections, will always be fulfilled promise, unless all reject)
+
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('ERROR'),
+  Promise.resolve('Another Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
