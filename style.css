@@ -57,7 +57,7 @@ body {
   font-size: 1.8rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: #888;
+  color: rgb(255, 255, 255);
 }
 
 .neighbor {
