@@ -136,14 +136,19 @@ btnInput.addEventListener('click', countryString);
 // };
 
 const getNeighbor = async function (data) {
-  const neighborAlpha = data[0].borders[0];
-  const getNeighbor = await fetch(
-    `https://restcountries.com/v3.1/alpha/${neighborAlpha}`
-  );
-  //using new data to run render country with neighbor
-  if (!getNeighbor.ok) throw new Error('Problem getting neighbor');
-  const neighborData = await getNeighbor.json();
-  renderCountry(neighborData[0], 'neighbor');
+  try {
+    if (!data[0].borders) throw new Error('No borders exist');
+    const neighborAlpha = data[0].borders[0];
+    const getNeighbor = await fetch(
+      `https://restcountries.com/v3.1/alpha/${neighborAlpha}`
+    );
+    if (!getNeighbor.ok) throw new Error('Problem getting neighbor');
+    //using new data to run render country with neighbor
+    const neighborData = await getNeighbor.json();
+    renderCountry(neighborData[0], 'neighbor');
+  } catch (err) {
+    renderError(`❌ ${err.message} `);
+  }
 };
 
 const getPosition = function () {
